@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import DefaultLayout from "./pages/DefaultLayout";
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
+import ManageTrainer from "./pages/ManageTrainer";
+import ManageTsx from "./pages/ManageTsx";
+import ManageUser from "./pages/ManageUser";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Header />
+      <div className="main-content">
+        <Sidebar />
+        {/* Your main content goes here */}
+      </div>
+      <Routes>
+        <Route path="/ManageTrainer" element={<ManageTrainer />} />
+        <Route path="/ManageTsx" element={<ManageTsx />} />
+        <Route path="/" element={<ManageUser />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

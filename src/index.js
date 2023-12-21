@@ -1,13 +1,40 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import DefaultLayout from "./pages/DefaultLayout";
+import ManageTrainer from "./pages/ManageTrainer";
+import ManageUser from "./pages/ManageUser";
+import ManageTsx from "./pages/ManageTsx";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <DefaultLayout />,
+    children: [
+      {
+        path: "/ManageTrainer",
+        element: <ManageTrainer />,
+      },
+      {
+        path: "/ManageUser",
+        element: <ManageUser />,
+      },
+      {
+        path: "/ManageTsx",
+        element: <ManageTsx />,
+      },
+    ],
+  },
+]);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
