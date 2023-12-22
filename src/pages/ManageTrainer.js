@@ -79,7 +79,7 @@ const ManageTrainer = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [open]);
 
   const FormModal = React.memo((props) => {
     console.log("rerendering...");
