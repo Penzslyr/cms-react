@@ -19,7 +19,7 @@ function App() {
       <Routes>
         <Route path="/ManageTrainer" element={<ManageTrainer />} />
         <Route path="/ManageTsx" element={<ManageTsx />} />
-        <Route path="/" element={<ManageUser />} />
+        <Route path="/ManageUser" element={<ManageUser />} />
       </Routes>
     </BrowserRouter>
   );

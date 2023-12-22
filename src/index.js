@@ -9,25 +9,31 @@ import DefaultLayout from "./pages/DefaultLayout";
 import ManageTrainer from "./pages/ManageTrainer";
 import ManageUser from "./pages/ManageUser";
 import ManageTsx from "./pages/ManageTsx";
+import LoginPage from "./pages/LoginPage";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/Dashboard",
     element: <DefaultLayout />,
     children: [
       {
-        path: "/ManageTrainer",
+        path: "ManageTrainer",
         element: <ManageTrainer />,
       },
       {
-        path: "/ManageUser",
+        path: "ManageUser",
         element: <ManageUser />,
       },
       {
-        path: "/ManageTsx",
+        path: "ManageTsx",
         element: <ManageTsx />,
       },
     ],
+  },
+  {
+    path: "/",
+    element: <LoginPage />,
+    index: true,
   },
 ]);
 

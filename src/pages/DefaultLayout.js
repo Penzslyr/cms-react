@@ -20,13 +20,13 @@ const DefaultLayout = () => {
         <div className="sidebar">
           <ul className="menu">
             <li>
-              <a href="/ManageUser">Manage User</a>
+              <a href="/Dashboard/ManageUser">Manage User</a>
             </li>
             <li>
-              <a href="/ManageTrainer">Manage Trainer</a>
+              <a href="/Dashboard/ManageTrainer">Manage Trainer</a>
             </li>
             <li>
-              <a href="/ManageTsx">Manage Transaction</a>
+              <a href="/Dashboard/ManageTsx">Manage Transaction</a>
             </li>
             {/* Add more menu items as needed */}
           </ul>
