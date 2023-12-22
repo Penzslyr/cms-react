@@ -44,7 +44,6 @@ const TABLE_HEAD = ["Name", "Mata Kuliah", "Index Nilai", "Action"];
 // ];
 
 const ManageTrainer = () => {
-  const nameInput = useRef("");
   const [open, setOpen] = useState(false);
   const [data, setData] = useState(null);
   const [selectedData, setSelectedData] = useState(null);
@@ -56,6 +55,7 @@ const ManageTrainer = () => {
   };
 
   const handleInput = (event) => {
+    event.preventDefault();
     let name = event.target.name;
     let value = event.target.value;
 
@@ -66,24 +66,6 @@ const ManageTrainer = () => {
     } else if (name === "score") {
       setSelectedData({ ...selectedData, score: value });
     }
-  };
-
-  const editData = () => {
-    axios
-      .put(
-        `https://backendexample.sanbercloud.com/api/student-scores/${selectedData.id}`,
-        {
-          name: selectedData.name,
-          course: selectedData.course,
-          score: selectedData.score,
-        }
-      )
-      .then((res) => {
-        handleOpen();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   useEffect(() => {
@@ -99,85 +81,105 @@ const ManageTrainer = () => {
       });
   }, []);
 
-  const EditFormModal = () => {
-    console.log(selectedData?.name);
+  const FormModal = React.memo((props) => {
+    console.log("rerendering...");
+    console.log("ini props", props);
+    const [nameInput, setNameInput] = useState(props.selectedData?.name);
+    const [courseInput, setCourseInput] = useState(props.selectedData?.course);
+    const [scoreInput, setScoreInput] = useState(props.selectedData?.score);
+
+    const editData = () => {
+      axios
+        .put(
+          `https://backendexample.sanbercloud.com/api/student-scores/${selectedData.id}`,
+          {
+            name: nameInput,
+            course: courseInput,
+            score: scoreInput,
+          }
+        )
+        .then((res) => {
+          handleOpen();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
     return (
-      <>
-        <Dialog
-          size="xs"
-          open={open}
-          handler={handleOpen}
-          className="bg-transparent shadow-none"
-        >
-          <Card className="mx-auto w-full max-w-[24rem]">
-            <CardBody className="flex flex-col gap-4">
-              <Typography variant="h4" color="blue-gray">
-                Sign In
-              </Typography>
-              <Typography
-                className="mb-3 font-normal"
-                variant="paragraph"
-                color="gray"
-              >
-                Enter your email and password to Sign In.
-              </Typography>
-              <Typography className="-mb-2" variant="h6">
-                Name
-              </Typography>
-              <Input
-                name="name"
-                value={selectedData?.name}
-                onChange={(e) => handleInput(e)}
-                label="Text"
-                size="lg"
-              />
-              <Typography className="-mb-2" variant="h6">
-                Course
-              </Typography>
-              <Input
-                name="course"
-                value={selectedData?.course}
-                onChange={(e) => handleInput(e)}
-                label="Text"
-                size="lg"
-              />
-              <Typography className="-mb-2" variant="h6">
-                Score
-              </Typography>
-              <Input
-                name="score"
-                value={selectedData?.score}
-                onChange={(e) => handleInput(e)}
-                label="Text"
-                size="lg"
-              />
-            </CardBody>
-            <CardFooter className="pt-0">
-              <Button variant="gradient" onClick={editData} fullWidth>
-                Sign In
-              </Button>
-              <Typography variant="small" className="mt-4 flex justify-center">
-                Don&apos;t have an account?
-                <Typography
-                  as="a"
-                  href="#signup"
-                  variant="small"
-                  color="blue-gray"
-                  className="ml-1 font-bold"
-                  onClick={handleOpen}
-                >
-                  Sign up
-                </Typography>
-              </Typography>
-            </CardFooter>
-          </Card>
-        </Dialog>
-      </>
+      <Card className="mx-auto w-full max-w-[24rem]">
+        <CardBody className="flex flex-col gap-4">
+          <Typography variant="h4" color="blue-gray">
+            Edit Data
+          </Typography>
+          <Typography
+            className="mb-3 font-normal"
+            variant="paragraph"
+            color="gray"
+          >
+            Masukan data yang ingin diubah
+          </Typography>
+          <Input
+            name="name"
+            label="NAME"
+            value={nameInput}
+            onChange={(event) => setNameInput(event.target.value)}
+            size="lg"
+          />
+
+          <Input
+            label="COURSE"
+            name="course"
+            value={courseInput}
+            onChange={(event) => setCourseInput(event.target.value)}
+            size="lg"
+          />
+
+          <Input
+            label="SCORE"
+            name="score"
+            value={scoreInput}
+            onChange={(event) => setScoreInput(event.target.value)}
+            size="lg"
+          />
+        </CardBody>
+        <CardFooter className="pt-0">
+          <div class="flex space-x-4">
+            <button
+              class="flex-1 select-none rounded-lg border border-gray-900 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              type="button"
+              onClick={() => handleOpen()}
+            >
+              Cancel
+            </button>
+            <button
+              class="flex-1 align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+              type="button"
+              onClick={() => editData()}
+            >
+              Submit
+            </button>
+          </div>
+        </CardFooter>
+      </Card>
+    );
+  });
+
+  const EditFormModal = () => {
+    return (
+      <Dialog
+        size="xs"
+        open={open}
+        handler={() => handleOpen()}
+        className="bg-transparent shadow-none"
+      >
+        <FormModal selectedData={selectedData} />
+      </Dialog>
     );
   };
 
   return (
-    <Card className="h-full w-full overflow-scroll">
+    <Card className="min-h-[100vh] min-w-[185vh]">
       <table className="w-full min-w-max table-auto text-left">
         <thead>
           <tr>
@@ -231,16 +233,19 @@ const ManageTrainer = () => {
                     {data?.score}
                   </Typography>
                 </td>
-                <Button onClick={() => handleOpen(data)} className={classes}>
-                  <Typography
-                    as="a"
-                    href="#"
-                    variant="small"
-                    className="font-medium"
-                  >
-                    Edit
-                  </Typography>
-                </Button>
+                <td className={classes}>
+                  {" "}
+                  <Button onClick={() => handleOpen(data)} className={classes}>
+                    <Typography
+                      as="a"
+                      href="#"
+                      variant="small"
+                      className="font-medium"
+                    >
+                      Edit
+                    </Typography>
+                  </Button>
+                </td>
               </tr>
             );
           })}
